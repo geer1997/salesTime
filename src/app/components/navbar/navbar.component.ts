@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from 'src/app/services/auth.service';
-import { User } from 'src/app/models/user';
-import { UserService } from 'src/app/services/user.service';
+import { Observable } from 'rxjs';
+import { User } from 'firebase';
 
 @Component({
   selector: 'app-navbar',
@@ -9,23 +9,29 @@ import { UserService } from 'src/app/services/user.service';
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
+  user: firebase.User;
+  user$: Observable<firebase.User>;
 
-  user: User;
-
-  constructor(
-    private authServ: AuthService,
-    private userService: UserService
-  ) { }
+  constructor(private authServ: AuthService) { }
 
   ngOnInit() {
-    this.userService.getCurrentUser('id').subscribe(u => {
-      this.user = u.payload.data();
-      console.log(u);
-    })
+    /*this.authServ.user.subscribe( (user) => {
+      this.user = user;
+      console.log(user);
+      if(user) {
+        console.log(user.displayName);
+      }
+    });*/
+    this.user$ = this.authServ.user;
+
   }
 
-  public GoogleAuth() {
+  public login() {
     this.authServ.loginWithGoogle();
+  }
+
+  logout() {
+    this.authServ.logout();
   }
 
 }

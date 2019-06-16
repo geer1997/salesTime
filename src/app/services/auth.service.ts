@@ -1,29 +1,41 @@
-import { Injectable } from '@angular/core';
+import { Injectable, NgZone } from '@angular/core';
 
 import { AngularFireAuth } from '@angular/fire/auth';
 import * as firebase from 'firebase/app';
 import { auth } from 'firebase/app';
+import { Observable, ReplaySubject } from 'rxjs';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { User } from '../models/user';
-import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  authUser: firebase.User;
-  authStateObservable: Observable<firebase.User>;
+  private isLoggedIn$ = new ReplaySubject<boolean>(1);
+  private user$ = new ReplaySubject<firebase.User>(1);
 
   constructor(
-    private afAuth: AngularFireAuth,
-    private af: AngularFirestore
-    ) {
-    afAuth.user.subscribe((authUser) => {
-      this.authUser = authUser;
+    public afAuth: AngularFireAuth,
+    public af: AngularFirestore,
+    private ngZone: NgZone
+  ) {
+    this.isLoggedIn$.next(false);
+    this.afAuth.auth.onAuthStateChanged(async (user) => {
+      this.ngZone.run(() => {
+        this.isLoggedIn$.next(Boolean(user));
+        this.user$.next(user);
+      })
     });
-    this.authStateObservable = afAuth.authState;
-   }
+  }
+
+  get isLoggedIn(): Observable<boolean> {
+    return this.isLoggedIn$.asObservable();
+  }
+
+  get user(): Observable<firebase.User> {
+    return this.user$.asObservable();
+  }
 
   /**
    * Log users in with Google Auth Provider Pop-up. It also create users in the bd
@@ -47,7 +59,7 @@ export class AuthService {
     });
   }
 
-  public loginWithEmailCredential(){
+  public loginWithEmailCredential() {
 
   }
 
@@ -58,4 +70,6 @@ export class AuthService {
   logout() {
     this.afAuth.auth.signOut();
   }
+
+
 }
