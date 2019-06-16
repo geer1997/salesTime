@@ -30,9 +30,24 @@
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
       </form>
     </ul>
-    <i class="material-icons">
-      person
-    </i>
-    <a (click)="GoogleAuth()"><span>Usuario</span></a>
+
+    <ng-container *ngIf="user$ | async as user; else loggedOut">
+      <div class="dropdown show">
+        <a class="dropdown-toggle" id="navbarDropdownUser" data-toggle="dropdown" aria-haspopup="true"
+          aria-expanded="false">
+          <i class="material-icons">person</i> {{ user.displayName }}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdownUser">
+          <a class="dropdown-item" href="#">Profile</a>
+          <a class="dropdown-item" (click)="logout()">Logout</a>
+        </div>
+      </div>
+
+
+    </ng-container>
+    <ng-template #loggedOut>
+      <a (click)="login()">Login</a>
+    </ng-template>
+
   </div>
 </nav>
