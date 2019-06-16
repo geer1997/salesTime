@@ -30,9 +30,9 @@
         <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
       </form>
     </ul>
-    <i class="material-icons">
-      person
-    </i>
-    <a (click)="GoogleAuth()"><span>Usuario</span></a>
+    <a (click)="GoogleAuth()"> 
+      <i class="material-icons">person</i>
+      <span>{{ user?.firstName }} {{ user?.lastName }}</span>
+    </a>
   </div>
 </nav>
