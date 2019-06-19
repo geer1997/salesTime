@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { User } from 'src/app/models/user';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
   selector: 'app-home',
@@ -7,9 +9,23 @@ import { Component, OnInit } from '@angular/core';
 })
 export class HomeComponent implements OnInit {
 
-  constructor() { }
+  public user: User;
 
+  public isLoading: boolean = true;
+
+  constructor(
+    private userService: UserService
+  ) { }
+  
+  /**
+   * Obtains the user information from database
+   * @author Germano Rojas
+   */
   ngOnInit() {
+    this.userService.getCurrentUser().subscribe(u => {
+      this.user = u;
+      this.isLoading = false;
+    })
   }
 
 }

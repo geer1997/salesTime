@@ -1,5 +1,5 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" href="/">Sales Time</a>
+  <a class="navbar-brand active" href="/">Sales Time</a>
   <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
     aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
     <span class="navbar-toggler-icon"></span>
@@ -7,9 +7,6 @@
 
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item active">
-        <a class="nav-link" href="/">Inicio <span class="sr-only">(current)</span></a>
-      </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown"
           aria-haspopup="true" aria-expanded="false">
@@ -25,29 +22,28 @@
       <li class="nav-item">
         <a class="nav-link" href="#">Stats</a>
       </li>
-      <form class="form-inline my-2 my-lg-0">
-        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-      </form>
     </ul>
-
-    <ng-container *ngIf="user$ | async as user; else loggedOut">
-      <div class="dropdown show">
-        <a class="dropdown-toggle" id="navbarDropdownUser" data-toggle="dropdown" aria-haspopup="true"
+    <form class="form-inline my-2 my-lg-0">
+      <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+    </form>
+    <ng-container>
+      <div class="nav-item dropdown show">
+        <a class="nav-link dropdown-toggle" id="navbarDropdownUser" data-toggle="dropdown" aria-haspopup="true"
           aria-expanded="false">
-          <i class="material-icons">person</i> {{ user.displayName }}
+          <span *ngIf="user"> {{ user.firstName?.charAt(0) }}{{ user.lastName?.charAt(0) }}</span>
         </a>
-        <div class="dropdown-menu" aria-labelledby="navbarDropdownUser">
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownUser">
+          <span class="dropdown-item">{{ user.firstName }} {{ user.lastName }}</span>
+          <div class="dropdown-divider"></div>
           <a class="dropdown-item" href="#">Profile</a>
           <a class="dropdown-item" (click)="logout()">Logout</a>
         </div>
       </div>
-
-
     </ng-container>
+
     <ng-template #loggedOut>
       <a (click)="login()">Login</a>
     </ng-template>
-
   </div>
 </nav>

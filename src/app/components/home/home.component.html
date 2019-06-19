@@ -1,3 +1,2 @@
-<p>
-  home works!
-</p>
+<app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+<app-home-greeting [user]="user" *ngIf="!isLoading"></app-home-greeting>

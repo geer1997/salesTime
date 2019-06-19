@@ -1,0 +1,18 @@
+div.container {
+    // display: flex;
+
+}
+
+div.welcome-container {
+    display: flex;
+    flex-direction: row;
+    order: 1;
+    flex: 3 1 25%;
+    width: 30px;
+}
+
+div.flex-col {
+    display: flex;
+    flex-direction: column;
+    order: 1;
+}

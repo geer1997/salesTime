@@ -1,0 +1,12 @@
+<div class="container" *ngIf="!isLoading">
+    <div class="row align-items-center">
+        <div class="col-6">
+          <h4>Bienvenido(a), <b>{{ user.firstName }}</b></h4>
+          <br>
+          Echa un vistazo a las gráficas de ventas de esta semana y planifica las que vienen
+        </div>
+        <div class="col-6">
+          <canvas baseChart [data]="doughnutChartData" [labels]="doughnutChartLabels" [chartType]="doughnutChartType"></canvas>
+        </div>
+    </div>
+  </div>

@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { AuthService } from './auth.service';
 import { AngularFirestore, DocumentSnapshot, Action } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, of } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
 import { User } from '../models/user';
 import { AngularFireAuth } from '@angular/fire/auth';
 
@@ -24,11 +24,22 @@ export class UserService {
 
   /**
    * Description: the method search the current user in the bd
-   * @param id id of the current user
    * @author Germano Rojas
    */
-  public getCurrentUser(id: string): Observable<Action<DocumentSnapshot<User>>> {
-    return this.af.collection(this.path).doc<User>(id).snapshotChanges();
+  public getCurrentUser(): Observable<User> {
+    return this.afAuth.authState.pipe(
+      switchMap(user => {
+          // Logged in
+          console.log("user", user);
+          
+        if (user) {
+          return this.af.doc<User>(`users/${user.uid}`).valueChanges();
+        } else {
+          // Logged out
+          return of(null);
+        }
+      })
+    )
     /* PENDIENTE: Determinar si será Action<DocumentSnapshot<User>>> o solamente el payload (<DocumentSnapshot<User>>) */
     // .pipe(map( u => {
     //   let newData: DocumentSnapshot<User> = u.payload;
